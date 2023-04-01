@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Card from "../../comp/Card";
 import { useRouter } from "next/router";
 import data from "../../public/data/recipes.json";
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./api/auth/[...nextauth]"
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
@@ -99,8 +101,6 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.flexbox}>
             <h1>What would you wish to cook?</h1>
-            <button onClick={() => router.push("/posts")
-            }>Add your own recipe</button>
           </div>
           <div id="scollbar" className={styles.catCont}>
             {cats.map((cat, i) => {
@@ -140,4 +140,24 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (!session) {
+    //redirect to login page
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      session,
+    },
+  }
 }

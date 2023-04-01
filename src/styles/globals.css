@@ -12,18 +12,53 @@ h2 {
   font-weight: 18px;
 }
 
-button {
-  background-color: var(--secondary);
-  color: black;
-  border: none;
-  border-radius: 10px;
-  padding: 1rem;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
 input {
   padding: 1rem;
+}
+
+/* NavBar */
+.navbar {
+  width: 100%;
+  background-color: var(--secondary);
+  padding: 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar-btncont {
+  display: flex;
+  width: 30%;
+  justify-content: space-around;
+  align-self: flex-end;
+}
+
+.icon-button {
+  display: flex;
+  color: black;
+  width: fit-content;
+  background-color: var(--primary);
+  height: 44px;
+  border-radius: 10px;
+}
+
+.navbar-button {
+  display: flex;
+  color: black;
+  width: fit-content;
+  background-color: var(--primary);
+  height: 44px;
+  border-radius: 10px;
+  min-width: 100px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  color: black;
+  background-color: transparent;
+  border: none;
+  justify-content: center;
+  cursor: pointer;
 }
 
 /* Card */
@@ -49,8 +84,6 @@ input {
 
 .card:hover {
   border: 2px solid var(--secondary);
-  
-
 }
 
 .card-img {
@@ -133,7 +166,7 @@ ul li::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: .6rem;
+  padding: 0.6rem;
   background-color: var(--secondary);
 }
 
@@ -166,7 +199,7 @@ ul li::before {
   html {
     color-scheme: dark;
   }
-  
+
   .category {
     color: black;
   }
@@ -175,5 +208,4 @@ ul li::before {
     background-color: var(--grey);
     color: black;
   }
-} 
-
+}
