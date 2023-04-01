@@ -1,0 +1,50 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  margin: 70px 100px;
+  height: 100vh;
+  justify-content: flex-start;
+  gap: 40px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: fit-content;
+}
+
+.flexbox {
+  display: flex;
+  justify-content: space-between  ;
+}
+
+.post {
+  color: black;
+  display: flex;
+  background-color: var(--primary);
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+hr {
+  background-color: var(
+    
+  );
+}
+
+@media (max-width: 820px) {
+
+
+  .main {
+    margin: 70px 20px;
+  }
+}
+
+@media (max-width: 414px) {
+
+
+  
+}
