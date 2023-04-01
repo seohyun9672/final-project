@@ -17,3 +17,7 @@ model Post {
   title     String  
   content   String?  @db.Text
 }
+model Channel {
+  id    Int    @id @default(autoincrement())
+  title  String @unique
+}
