@@ -90,14 +90,18 @@ export default function Home() {
       <Head>
         <title>Find Recipes</title>
         <meta name="author" content="Anna Jeong" />
-        <meta property="og:title" content="Assignment #2 - Home Page" />
+        <meta property="og:title" content="Home Page" />
         <meta name="description" content="Find Recipes App" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/imgs/favicon.png" />
       </Head>
       <main className={styles.main}>
         <div className={styles.container}>
-          <h1>What would you wish to cook?</h1>
+          <div className={styles.flexbox}>
+            <h1>What would you wish to cook?</h1>
+            <button onClick={() => router.push("/posts")
+            }>Add your own recipe</button>
+          </div>
           <div id="scollbar" className={styles.catCont}>
             {cats.map((cat, i) => {
               return (

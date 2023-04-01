@@ -51,7 +51,7 @@ export default function Recipe() {
       <Head>
         <title>{title}</title>
         <meta name="author" content="Anna Jeong" />
-        <meta property="og:title" content="Assignment #2 - Recipe Page" />
+        <meta property="og:title" content="Recipe Page" />
         <meta name="description" content="Recipe Detail" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/imgs/favicon.png" />
