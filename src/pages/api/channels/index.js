@@ -1,26 +1,34 @@
-import { getAllChannels, createChannel } from "@/database";
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   switch (req.method) {
-    case "GET":
-      // Get all channels
+    case 'GET':
       try {
-        const channels = await getAllChannels();
+        const channels = await prisma.channel.findMany({
+          select: {
+            id: true,
+            title: true,
+            img: true
+          },
+        });
         res.status(200).json(channels);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error retrieving channels" });
+        res.status(500).json({ message: 'Something went wrong' });
       }
       break;
-    case "POST":
-      // Create a new channel
+    case 'POST':
+      const channelData = req.body;
       try {
-        const { title } = req.body;
-        const newChannel = await createChannel(title);
+        const newChannel = await prisma.channel.create({
+          data: channelData,
+        });
         res.status(201).json(newChannel);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error creating channel" });
+        res.status(500).json({ message: 'Something went wrong' });
       }
       break;
     default:
