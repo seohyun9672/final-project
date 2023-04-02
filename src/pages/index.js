@@ -5,12 +5,10 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import Category from "../../comp/Category";
 import Card from "../../comp/Card";
 
 export default function Home() {
   const [channels, setChannels] = useState([]);
-  const [recipes, setRecipes] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,7 +51,10 @@ export default function Home() {
                   ingredients={channel.ingredients}
                   instructions={channel.instructions}
                   handleClick={() => {
-                    router.push(`/channels/1`);
+                    router.push({
+                      pathname: '/channels',
+                      query: { channelId: channel.id },
+                    });
                   }}
                 />
               );
