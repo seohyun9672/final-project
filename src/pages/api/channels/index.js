@@ -10,7 +10,12 @@ export default async function handler(req, res) {
           select: {
             id: true,
             title: true,
-            img: true
+            img: true,
+            servingSize: true,
+            totalTime: true,
+            rating: true,
+            ingredients: true,
+            instructions: true,
           },
         });
         res.status(200).json(channels);

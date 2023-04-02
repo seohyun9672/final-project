@@ -1,91 +1,29 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Category from "../../comp/Category";
 import { useEffect, useState } from "react";
-import Card from "../../comp/Card";
 import { useRouter } from "next/router";
-import data from "../../public/data/recipes.json";
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "./api/auth/[...nextauth]"
+import axios from "axios";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
+import Category from "../../comp/Category";
+import Card from "../../comp/Card";
 
 export default function Home() {
+  const [channels, setChannels] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [header, setHeader] = useState("Popular");
   const router = useRouter();
 
-  var cats = [
-    {
-      src: "/imgs/heart.svg",
-      name: "Popular",
-    },
-    {
-      src: "/imgs/pizza.svg",
-      name: "Pizza",
-    },
-    {
-      src: "/imgs/cuisine.svg",
-      name: "Cuisine",
-    },
-    {
-      src: "/imgs/dessert.svg",
-      name: "Desserts",
-    },
-    {
-      src: "/imgs/drink.svg",
-      name: "Drinks",
-    },
-    {
-      src: "/imgs/salad.svg",
-      name: "Salad",
-    },
-  ];
-
   useEffect(() => {
-    setRecipes(data);
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/channels");
+        setChannels(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    if (header === "Popular") {
-      getPopularRecipes();
-    }
-  }, [header]);
-
-  const getPopularRecipes = () => {
-    let popularRecipes = [];
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].rating > 4.9) {
-        popularRecipes.push(data[i]);
-      }
-    }
-
-    let mostPopular = popularRecipes
-      .sort(() => Math.random() - Math.random())
-      .slice(0, 10);
-
-    setRecipes(mostPopular);
-  };
-
-  const sortRecipes = (categoryName) => {
-    const recipeNames = new Set();
-    const sortedRecipes = [];
-
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].cuisine_path.includes(categoryName)) {
-        const recipeName = data[i].recipe_name;
-        if (!recipeNames.has(recipeName)) {
-          sortedRecipes.push(data[i]);
-          recipeNames.add(recipeName);
-        }
-      }
-    }
-    setRecipes(sortedRecipes);
-  };
-  const handleCardClick = (id) => {
-    router.push({
-      pathname: "/recipes",
-      query: { id: id },
-    });
-  };
 
   return (
     <>
@@ -100,41 +38,26 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.container}>
           <div className={styles.flexbox}>
-            <h1>What would you wish to cook?</h1>
+            <h1>Find Recipes You Like</h1>
           </div>
-          <div id="scollbar" className={styles.catCont}>
-            {cats.map((cat, i) => {
+          <div className={styles.catCont}>
+            {channels.map((channel) => {
               return (
-                <Category
-                  key={i}
-                  text={cat.name}
-                  src={cat.src}
+                <Card
+                  key={channel.id}
+                  title={channel.title}
+                  src={channel.img}
+                  servings={channel.servingSize}
+                  time={channel.totalTime}
+                  rating={channel.rating}
+                  ingredients={channel.ingredients}
+                  instructions={channel.instructions}
                   handleClick={() => {
-                    setHeader(cat.name), sortRecipes(cat.name);
+                    router.push(`/channels/1`);
                   }}
                 />
               );
             })}
-          </div>
-        </div>
-        <div className={styles.container}>
-          <h2>{header}</h2>
-          <div id="popular" className={styles.cardCont}>
-            {recipes &&
-              recipes.map((recipe, i) => {
-                return (
-                  <Card
-                    key={i}
-                    title={recipe.recipe_name}
-                    src={recipe.img_src}
-                    ratings={recipe.rating}
-                    servings={recipe.servings}
-                    unit={recipe.servings > 1 ? "servings" : "serving"}
-                    time={recipe.total_time}
-                    handleClick={() => handleCardClick(recipes[i].id)}
-                  />
-                );
-              })}
           </div>
         </div>
       </main>
@@ -143,7 +66,7 @@ export default function Home() {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
     //redirect to login page
@@ -152,12 +75,12 @@ export async function getServerSideProps(context) {
         destination: "/api/auth/signin",
         permanent: false,
       },
-    }
+    };
   }
 
   return {
     props: {
       session,
     },
-  }
+  };
 }
