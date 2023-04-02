@@ -28,6 +28,7 @@ model Channel {
   updatedAt       DateTime     @updatedAt
   ingredients     String[]
   instructions    String[]
+  comments      Comment[]
 }
 
 model Comment {
@@ -35,4 +36,6 @@ model Comment {
   text        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  channel     Channel  @relation(fields: [channelId], references: [id])
+  channelId   Int
 }
