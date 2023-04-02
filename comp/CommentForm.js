@@ -1,25 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState } from "react";
+import axios from "axios";
 
-export default function CommentForm({ onSubmit }) {
-  const [author, setAuthor] = useState("");
+export default function CommentForm({ channelId, setComments }) {
   const [text, setText] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onSubmit({ author, text });
-    setAuthor("");
-    setText("");
+    try {
+      const res = await axios.post(`/api/channels/${channelId}/comments`, {
+        text,
+      });
+      setComments((prevComments) => [...prevComments, res.data]);
+      setText("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  return <>
-    <form className="form-comment" onSubmit={handleSubmit}>
-      <h2>Add a Comment</h2>
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Comments</h2>
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
-        required
+        placeholder="Write a comment..."
       />
-      <button className="button-primary" type="submit">Leave a Comment</button>
+      <button type="submit" disabled={!text}>
+        Post
+      </button>
     </form>
-  </>
+  );
 }

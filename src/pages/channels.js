@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import axios from 'axios';
-import Head from 'next/head';
+import axios from "axios";
+import Head from "next/head";
 import styles from "../styles/Channels.module.css";
 import Card from "../../comp/Card";
-import CommentForm from '../../comp/CommentForm';
+import CommentForm from "../../comp/CommentForm";
 
 export default function Posts() {
   const [channel, setChannel] = useState(null);
   const router = useRouter();
   const { channelId } = router.query;
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     async function fetchChannelData() {
@@ -20,8 +21,19 @@ export default function Posts() {
         console.error(error);
       }
     }
+
+    async function fetchComments() {
+      try {
+        const res = await axios.get(`/api/channels/${channelId}/comments`);
+        setComments(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     if (channelId) {
       fetchChannelData();
+      fetchComments();
     }
   }, [channelId]);
 
@@ -51,7 +63,23 @@ export default function Posts() {
             ingredients={channel.ingredients}
             instructions={channel.instructions}
           />
-            <CommentForm />
+          {comments.length === 0 ? (
+            <div>No comments yet. Be the first to comment!</div>
+          ) : (
+            <div>
+              {comments.map((comment) => (
+                <div key={comment.id} className={styles.comment}>
+                  <small>{comment.createdAt}</small>
+                  <p>{comment.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          <CommentForm
+            comments={comments}
+            setComments={setComments}
+            channelId={channel.id}
+          />
         </div>
       </main>
     </>
