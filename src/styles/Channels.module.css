@@ -9,8 +9,7 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 3rem;
   height: fit-content;
 }
 
@@ -19,20 +18,7 @@
   justify-content: space-between  ;
 }
 
-.post {
-  color: black;
-  display: flex;
-  background-color: var(--primary);
-  width: 100%;
-  max-width: 500px;
-  padding: 1rem;
-  border-radius: 10px;
-}
-
-
 @media (max-width: 820px) {
-
-
   .main {
     margin: 70px 20px;
   }
@@ -40,6 +26,4 @@
 
 @media (max-width: 414px) {
 
-
-  
 }
