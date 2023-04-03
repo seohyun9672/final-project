@@ -6,11 +6,13 @@ import styles from "../styles/Channels.module.css";
 import Card from "../../comp/Card";
 import CommentForm from "../../comp/CommentForm";
 
-export default function Posts() {
+export default function Comment() {
   const [channel, setChannel] = useState(null);
   const router = useRouter();
   const { channelId } = router.query;
   const [comments, setComments] = useState([]);
+  const [text, setText] = useState("");
+  const [commentId, setCommentId] = useState(null);
 
   useEffect(() => {
     async function fetchChannelData() {
@@ -36,6 +38,43 @@ export default function Posts() {
       fetchComments();
     }
   }, [channelId]);
+
+
+  const handleEditComment = async (commentId, newText) => {
+    try {
+      const res = await axios.patch(`/api/channels/${channelId}/comments/${commentId}`, {
+        text: newText
+      });
+      setComments(comments.map((comment) => comment.id === commentId ? res.data : comment));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    console.log("Deleting comment with ID:", commentId);
+    try {
+      await axios.delete(`/api/channels/${channelId}/comments/${commentId}`);
+      setComments(comments.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const res = await axios.post(`/api/channels/${channelId}/comments`, {
+        text,
+        commentId,
+      });
+      setComments((prevComments) => [...prevComments, res.data]);
+      setText("");
+      setCommentId(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!channel) {
     return <div>Loading...</div>;
@@ -71,15 +110,35 @@ export default function Posts() {
                 <div key={comment.id} className={styles.comment}>
                   <small>{comment.createdAt}</small>
                   <p>{comment.text}</p>
+                  <div>
+                    <button
+                      className="button-primary"
+                      onClick={() => handleEditComment(comment.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="button-primary"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
-          <CommentForm
-            comments={comments}
-            setComments={setComments}
-            channelId={channel.id}
-          />
+          <form onSubmit={handleSubmit}>
+            <h2>Comments</h2>
+            <textarea
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder="Write a comment..."
+            />
+            <button className="button-primary" type="submit">
+              Leave a comment
+            </button>
+          </form>
         </div>
       </main>
     </>

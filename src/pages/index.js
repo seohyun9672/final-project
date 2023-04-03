@@ -6,6 +6,7 @@ import axios from "axios";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Card from "../../comp/Card";
+import RecipeForm from "../../comp/RecipeForm";
 
 export default function Home() {
   const [channels, setChannels] = useState([]);
@@ -22,6 +23,15 @@ export default function Home() {
     }
     fetchData();
   }, []);
+
+  const handleAddChannel = async (channel) => {
+    try {
+      const res = await axios.post("/api/channels", channel);
+      setChannels([...channels, res.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -60,6 +70,7 @@ export default function Home() {
               );
             })}
           </div>
+          <RecipeForm onAdd={handleAddChannel} />
         </div>
       </main>
     </>

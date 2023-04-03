@@ -1,3 +1,9 @@
+:root {
+  --primary: #fff4db;
+  --secondary: #ffcc4d;
+  --grey: #eaeaea;
+}
+
 *,
 html {
   font-family: Raleway, sans-serif;
@@ -86,6 +92,16 @@ button {
   min-width: 100px;
 }
 
+.button-secondary {
+  display: flex;
+  color: black;
+  width: fit-content;
+  background-color: var(--secondary);
+  height: 44px;
+  border-radius: 10px;
+  min-width: 100px;
+}
+
 /* Card */
 .card {
   display: flex;
@@ -106,6 +122,11 @@ button {
   cursor: pointer;
   gap: 1rem;
   box-sizing: border-box;
+}
+
+.card.add {
+  width: 100%;
+  max-width: 1000px;
 }
 
 .card-top {
@@ -163,30 +184,20 @@ button {
   justify-content: flex-end;
 }
 
-/* Category */
-.category {
+input, textarea {
+  background-color: rgb(227, 227, 227);
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.input-cont {
   display: flex;
+  /* align-items: center; */
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary);
-  width: 100px;
-  height: 100px;
-  gap: 10px;
-  border-radius: 20px;
-  padding: 4px 0;
-  flex: none;
-  flex-grow: 0;
-  cursor: pointer;
-}
-
-.category:hover {
-  background-color: var(--secondary);
-}
-
-.cat-img {
-  width: 60px;
-  height: 60px;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 1rem;
 }
 
 /* List */
@@ -230,11 +241,6 @@ ul li::before {
   flex-direction: row;
 }
 
-:root {
-  --primary: #fff4db;
-  --secondary: #ffcc4d;
-  --grey: #eaeaea;
-}
 
 /* Form */
 .form-comment {

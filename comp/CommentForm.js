@@ -3,15 +3,19 @@ import axios from "axios";
 
 export default function CommentForm({ channelId, setComments }) {
   const [text, setText] = useState("");
+  const [commentId, setCommentId] = useState(null);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const res = await axios.post(`/api/channels/${channelId}/comments`, {
         text,
+        commentId,
       });
       setComments((prevComments) => [...prevComments, res.data]);
       setText("");
+      setCommentId(null);
     } catch (error) {
       console.error(error);
     }
@@ -25,8 +29,8 @@ export default function CommentForm({ channelId, setComments }) {
         onChange={(event) => setText(event.target.value)}
         placeholder="Write a comment..."
       />
-      <button type="submit" disabled={!text}>
-        Post
+      <button className="button-primary" type="submit">
+        Leave a comment
       </button>
     </form>
   );

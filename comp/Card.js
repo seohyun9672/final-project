@@ -10,14 +10,14 @@ export default function Card(props) {
               <div className="detail">
                 <img src="/imgs/star.svg" />
                 <span>Rating: </span>
-                  {props.rating}
+                {props.rating}
               </div>
             )}
             {props.servings !== "" && (
               <div className="detail">
                 <img src="/imgs/servings.svg" />
-                  <span>Serving Size: </span>
-                  {props.servings}
+                <span>Serving Size: </span>
+                {props.servings}
               </div>
             )}
             {props.time !== "" && (
@@ -37,7 +37,7 @@ export default function Card(props) {
             <li key={index}>{ingredient}</li>
           ))}
         </ul>
-        </div>
+      </div>
       <div className="list-cont">
         <h2 className="card-subtitle">Instructions</h2>
         <ul>
@@ -46,7 +46,6 @@ export default function Card(props) {
           ))}
         </ul>
       </div>
-
     </div>
   );
 }
